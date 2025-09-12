@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        'cyber': ['Share Tech Mono', 'monospace'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -80,10 +83,35 @@ export default {
             height: "0",
           },
         },
+        "fadeInUp": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(20px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        "glowPulse": {
+          "0%, 100%": {
+            boxShadow: "0 0 8px hsl(var(--primary))",
+          },
+          "50%": {
+            boxShadow: "0 0 15px hsl(var(--primary)), 0 0 20px hsl(var(--primary))",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fadeInUp": "fadeInUp 0.5s ease-out",
+        "glowPulse": "glowPulse 2s ease-in-out infinite",
+      },
+      boxShadow: {
+        "glow": "0 0 8px hsl(var(--primary))",
+        "glow-intense": "0 0 15px hsl(var(--primary)), 0 0 20px hsl(var(--primary))",
+        "glow-secondary": "0 0 5px hsl(var(--secondary))",
       },
     },
   },

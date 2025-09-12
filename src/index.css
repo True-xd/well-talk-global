@@ -1,40 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Cyberpunk Healthcare Chatbot Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Cyberpunk color palette */
+    --background: 210 24% 7%;  /* Dark background #111827 */
+    --foreground: 180 100% 40%; /* Neon cyan #00cccc */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Chat interface colors */
+    --card: 210 20% 14%;  /* Dark gray #1f2937 */
+    --card-foreground: 180 100% 40%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 210 20% 14%;
+    --popover-foreground: 180 100% 40%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Neon cyan primary */
+    --primary: 180 100% 40%;  /* Neon cyan #00cccc */
+    --primary-foreground: 210 24% 7%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Purple for user messages */
+    --secondary: 271 76% 53%;  /* Purple #9370DB */
+    --secondary-foreground: 210 24% 7%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Chat bubbles and inputs */
+    --muted: 210 16% 22%;  /* Light gray #374151 */
+    --muted-foreground: 180 100% 40%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 51 91% 68%;  /* Alert yellow */
+    --accent-foreground: 210 24% 7%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Borders and inputs with neon glow */
+    --border: 180 100% 40%;
+    --input: 210 20% 14%;
+    --ring: 180 100% 40%;
+
+    /* Neon glow effects */
+    --glow-primary: 0 0 8px hsl(180 100% 40%);
+    --glow-primary-intense: 0 0 15px hsl(180 100% 40%), 0 0 20px hsl(180 100% 40%);
+    --glow-secondary: 0 0 5px hsl(271 76% 53%);
+
+    /* Alert colors */
+    --alert-background: 51 91% 15%;
+    --alert-foreground: 51 91% 68%;
 
     --radius: 0.5rem;
 
@@ -55,42 +69,26 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+}
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+/* Custom animations and effects */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: var(--glow-primary);
+  }
+  50% {
+    box-shadow: var(--glow-primary-intense);
   }
 }
 
@@ -100,6 +98,29 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-cyber;
+  }
+
+  /* Custom scrollbar styles */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  
+  .scrollbar-track-card {
+    scrollbar-color: hsl(var(--primary)) hsl(var(--card));
+  }
+
+  .scrollbar-thumb-primary::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scrollbar-thumb-primary::-webkit-scrollbar-track {
+    background: hsl(var(--card));
+  }
+  
+  .scrollbar-thumb-primary::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--primary));
+    border-radius: 10px;
+    border: 2px solid hsl(var(--card));
   }
 }
