@@ -162,7 +162,7 @@ export function ChatBot() {
 
         {/* Alert Banner */}
         {showAlert && (
-          <Alert className="mx-6 mt-4 border-amber-200 bg-amber-50 text-amber-800 animate-fadeInUp">
+          <Alert className="mx-4 mt-3 mb-2 border-amber-200 bg-amber-50 text-amber-800 animate-fadeInUp">
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription className="text-sm">
               <strong>Health Alert:</strong> {translations[currentLang].outbreak_alert}
