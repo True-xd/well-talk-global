@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { Send } from 'lucide-react';
+import { Send, MessageCircle, Globe, AlertTriangle, Stethoscope } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 import { translations, type Language } from '@/lib/translations';
 
 interface Message {
@@ -18,6 +20,7 @@ export function ChatBot() {
   const [input, setInput] = useState('');
   const [currentLang, setCurrentLang] = useState<Language>('en');
   const [showAlert, setShowAlert] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,10 +33,10 @@ export function ChatBot() {
     };
     setMessages([welcomeMessage]);
 
-    // Show alert after 1 second
+    // Show alert after 2 seconds
     const timer = setTimeout(() => {
       setShowAlert(true);
-    }, 1000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -73,7 +76,7 @@ export function ChatBot() {
       botResponse = translations[currentLang].outbreak_alert;
     }
 
-    return `${botResponse}<br><br><span class="text-xs font-light opacity-80">${translations[currentLang].disclaimer}</span>`;
+    return `${botResponse}<br><br><span class="text-xs text-muted-foreground italic">${translations[currentLang].disclaimer}</span>`;
   };
 
   const handleSendMessage = () => {
@@ -88,17 +91,19 @@ export function ChatBot() {
 
     setMessages(prev => [...prev, userMessage]);
     setInput('');
+    setIsTyping(true);
 
-    // Bot response after delay
+    // Bot response after delay with typing indicator
     setTimeout(() => {
+      setIsTyping(false);
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
         sender: 'bot',
-        text: getBotResponse(input),
+        text: getBotResponse(userMessage.text),
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, botResponse]);
-    }, 500);
+    }, 1500);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -107,83 +112,139 @@ export function ChatBot() {
     }
   };
 
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: false
+    });
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-background font-cyber">
-      <div className="bg-card border-2 border-primary rounded-3xl shadow-2xl overflow-hidden w-full max-w-4xl flex flex-col h-[90vh] shadow-glow">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 flex items-center justify-center">
+      <Card className="w-full max-w-4xl h-[85vh] flex flex-col shadow-xl border-0 bg-white/80 backdrop-blur-sm">
         
-        {/* Header */}
-        <div className="bg-muted p-6 flex justify-between items-center border-b-2 border-primary">
-          <h1 className="text-2xl font-bold text-primary drop-shadow-[0_0_8px_hsl(var(--primary))]">
-            HEALTHCARE AI
-          </h1>
-          <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-foreground">Language:</span>
-            <Select value={currentLang} onValueChange={(value: Language) => setCurrentLang(value)}>
-              <SelectTrigger className="w-32 bg-input border-2 border-primary text-foreground shadow-glow focus:shadow-glow-intense">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-card border-primary">
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="hi">हिन्दी</SelectItem>
-                <SelectItem value="te">తెలుగు</SelectItem>
-              </SelectContent>
-            </Select>
+        {/* Enhanced Header */}
+        <div className="bg-white border-b border-slate-200 p-6 rounded-t-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <Stethoscope className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-xl font-semibold text-foreground">Healthcare AI Assistant</h1>
+                <p className="text-sm text-muted-foreground">Your multilingual medical companion</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <Badge variant="secondary" className="flex items-center space-x-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-xs">Online</span>
+              </Badge>
+              
+              <div className="flex items-center space-x-2">
+                <Globe className="h-4 w-4 text-muted-foreground" />
+                <Select value={currentLang} onValueChange={(value: Language) => setCurrentLang(value)}>
+                  <SelectTrigger className="w-28 h-8 border-slate-300 focus:border-primary">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="hi">हिन्दी</SelectItem>
+                    <SelectItem value="te">తెలుగు</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Alert */}
+        {/* Alert Banner */}
         {showAlert && (
-          <Alert className="m-4 bg-accent/20 border-accent text-accent-foreground animate-fadeInUp">
-            <AlertDescription>
-              {translations[currentLang].outbreak_alert} ({translations[currentLang].alert_disclaimer})
+          <Alert className="mx-6 mt-4 border-amber-200 bg-amber-50 text-amber-800 animate-fadeInUp">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription className="text-sm">
+              <strong>Health Alert:</strong> {translations[currentLang].outbreak_alert}
+              <span className="block text-xs mt-1 opacity-75">
+                {translations[currentLang].alert_disclaimer}
+              </span>
             </AlertDescription>
           </Alert>
         )}
 
-        {/* Chat Window */}
+        {/* Enhanced Chat Window */}
         <div 
           ref={chatRef}
-          className="flex-grow p-6 overflow-y-auto space-y-4 scrollbar-thin scrollbar-track-card scrollbar-thumb-primary"
-          style={{
-            scrollbarWidth: 'thin',
-            scrollbarColor: 'hsl(var(--primary)) hsl(var(--card))',
-          }}
+          className="flex-1 p-6 overflow-y-auto chat-scrollbar space-y-4"
         >
           {messages.map((message) => (
             <div
               key={message.id}
               className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fadeInUp`}
             >
-              <div
-                className={`p-4 max-w-[80%] ${
-                  message.sender === 'user'
-                    ? 'bg-secondary text-secondary-foreground shadow-glow-secondary rounded-3xl rounded-br-lg'
-                    : 'bg-muted text-foreground border border-primary shadow-glow rounded-3xl rounded-bl-lg'
-                }`}
-                dangerouslySetInnerHTML={{ __html: message.text }}
-              />
+              <div className="flex flex-col max-w-[75%]">
+                <div
+                  className={`p-4 rounded-2xl ${
+                    message.sender === 'user'
+                      ? 'bg-primary text-primary-foreground rounded-br-md ml-auto'
+                      : 'bg-slate-100 text-slate-900 rounded-bl-md border border-slate-200'
+                  } shadow-sm`}
+                  dangerouslySetInnerHTML={{ __html: message.text }}
+                />
+                <span className={`text-xs text-muted-foreground mt-1 ${
+                  message.sender === 'user' ? 'text-right' : 'text-left'
+                }`}>
+                  {formatTime(message.timestamp)}
+                </span>
+              </div>
             </div>
           ))}
+
+          {/* Typing Indicator */}
+          {isTyping && (
+            <div className="flex justify-start animate-fadeInUp">
+              <div className="bg-slate-100 p-4 rounded-2xl rounded-bl-md border border-slate-200 shadow-sm">
+                <div className="flex space-x-1">
+                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Input Area */}
-        <div className="p-4 border-t-2 border-primary bg-card flex items-center space-x-4">
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Type your message here..."
-            className="flex-grow bg-input border-2 border-primary text-foreground placeholder:text-muted-foreground shadow-glow focus:shadow-glow-intense transition-all duration-200"
-          />
-          <Button
-            onClick={handleSendMessage}
-            disabled={!input.trim()}
-            className="p-3 bg-primary text-primary-foreground shadow-glow hover:shadow-glow-intense hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100"
-          >
-            <Send className="h-6 w-6 rotate-90" />
-          </Button>
+        {/* Enhanced Input Area */}
+        <div className="p-6 bg-white border-t border-slate-200 rounded-b-lg">
+          <div className="flex items-center space-x-3">
+            <div className="flex-1 relative">
+              <Input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Ask about symptoms, vaccinations, or preventive care..."
+                className="h-12 pl-4 pr-12 border-slate-300 focus:border-primary focus:ring-primary/20 rounded-xl"
+                disabled={isTyping}
+              />
+              <MessageCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            </div>
+            
+            <Button
+              onClick={handleSendMessage}
+              disabled={!input.trim() || isTyping}
+              className="h-12 px-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Send className="h-5 w-5" />
+            </Button>
+          </div>
+          
+          <div className="flex items-center justify-between mt-3 text-xs text-muted-foreground">
+            <span>Powered by Healthcare AI • Multilingual Support</span>
+            <span>Press Enter to send</span>
+          </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

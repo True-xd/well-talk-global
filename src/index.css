@@ -1,54 +1,61 @@
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Cyberpunk Healthcare Chatbot Design System */
+/* Modern Healthcare Chatbot Design System */
 
 @layer base {
   :root {
-    /* Cyberpunk color palette */
-    --background: 210 24% 7%;  /* Dark background #111827 */
-    --foreground: 180 100% 40%; /* Neon cyan #00cccc */
+    /* Modern white theme palette */
+    --background: 0 0% 100%;  /* Pure white */
+    --foreground: 224 71% 4%;  /* Deep navy text */
 
-    /* Chat interface colors */
-    --card: 210 20% 14%;  /* Dark gray #1f2937 */
-    --card-foreground: 180 100% 40%;
+    /* Clean card design */
+    --card: 0 0% 100%;  /* White cards */
+    --card-foreground: 224 71% 4%;
 
-    --popover: 210 20% 14%;
-    --popover-foreground: 180 100% 40%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71% 4%;
 
-    /* Neon cyan primary */
-    --primary: 180 100% 40%;  /* Neon cyan #00cccc */
-    --primary-foreground: 210 24% 7%;
+    /* Modern blue primary */
+    --primary: 221 83% 53%;  /* Professional blue #2563eb */
+    --primary-foreground: 0 0% 100%;
 
-    /* Purple for user messages */
-    --secondary: 271 76% 53%;  /* Purple #9370DB */
-    --secondary-foreground: 210 24% 7%;
+    /* Soft gray secondary */
+    --secondary: 210 40% 96%;  /* Light gray #f1f5f9 */
+    --secondary-foreground: 224 71% 4%;
 
-    /* Chat bubbles and inputs */
-    --muted: 210 16% 22%;  /* Light gray #374151 */
-    --muted-foreground: 180 100% 40%;
+    /* Muted elements */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 51 91% 68%;  /* Alert yellow */
-    --accent-foreground: 210 24% 7%;
+    /* Accent colors */
+    --accent: 210 40% 96%;
+    --accent-foreground: 224 71% 4%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    /* Borders and inputs with neon glow */
-    --border: 180 100% 40%;
-    --input: 210 20% 14%;
-    --ring: 180 100% 40%;
+    /* Clean borders */
+    --border: 214 32% 91%;
+    --input: 0 0% 100%;
+    --ring: 221 83% 53%;
 
-    /* Neon glow effects */
-    --glow-primary: 0 0 8px hsl(180 100% 40%);
-    --glow-primary-intense: 0 0 15px hsl(180 100% 40%), 0 0 20px hsl(180 100% 40%);
-    --glow-secondary: 0 0 5px hsl(271 76% 53%);
+    /* Enhanced shadows */
+    --shadow-soft: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-medium: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-large: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
     /* Alert colors */
-    --alert-background: 51 91% 15%;
-    --alert-foreground: 51 91% 68%;
+    --alert-background: 59 100% 96%;
+    --alert-foreground: 59 100% 25%;
+
+    /* Chat bubble colors */
+    --user-bubble: 221 83% 53%;  /* Blue for user */
+    --user-bubble-foreground: 0 0% 100%;
+    --bot-bubble: 210 40% 96%;   /* Light gray for bot */
+    --bot-bubble-foreground: 224 71% 4%;
 
     --radius: 0.5rem;
 
@@ -98,29 +105,29 @@
   }
 
   body {
-    @apply bg-background text-foreground font-cyber;
+    @apply bg-slate-50 text-foreground font-sans antialiased;
   }
 
-  /* Custom scrollbar styles */
-  .scrollbar-thin {
+  /* Modern scrollbar styles */
+  .chat-scrollbar {
     scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
   }
   
-  .scrollbar-track-card {
-    scrollbar-color: hsl(var(--primary)) hsl(var(--card));
+  .chat-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .chat-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .chat-scrollbar::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border));
+    border-radius: 3px;
   }
 
-  .scrollbar-thumb-primary::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  .scrollbar-thumb-primary::-webkit-scrollbar-track {
-    background: hsl(var(--card));
-  }
-  
-  .scrollbar-thumb-primary::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--primary));
-    border-radius: 10px;
-    border: 2px solid hsl(var(--card));
+  .chat-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground));
   }
 }

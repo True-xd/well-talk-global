@@ -14,7 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        'cyber': ['Share Tech Mono', 'monospace'],
+        'inter': ['Inter', 'sans-serif'],
+        'sans': ['Inter', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
